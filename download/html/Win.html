@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SN の Blog の 镜像站 Windows下载</title>
+    <!-- 网页图标 -->
+    <link rel="icon" href="Favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            /* 背景图片：Background1.png，透明，无毛玻璃特效 */
+            background: url('Background1.png') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            padding: 16px;
+        }
+
+        /* 主容器 - 透明卡片 */
+        .download-container {
+            width: 100%;
+            max-width: 1000px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0 24px 40px;
+            border-radius: 32px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部透明条 - 完全透明，包含头像和站点名称 */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 20px 0 15px 0;
+            margin-bottom: 20px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: transparent;
+            margin-right: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            background: transparent;
+        }
+
+        /* 内容卡片 - 半透明背景介绍区，无模糊 */
+        .content-card {
+            background: rgba(20, 20, 30, 0.75);
+            border-radius: 36px;
+            padding: 35px 30px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            margin: 20px 0 30px;
+        }
+
+        /* 软件标题 */
+        .software-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            padding-bottom: 20px;
+        }
+
+        .software-icon {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        }
+
+        .software-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* 介绍段落 - 历史 */
+        .description {
+            color: #f0f0f0;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            margin-bottom: 30px;
+        }
+
+        .description p {
+            margin-bottom: 18px;
+        }
+
+        .history-list {
+            list-style-type: none;
+            margin: 25px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-list li {
+            margin-bottom: 8px;
+            padding-left: 28px;
+            position: relative;
+            font-size: 1.1rem;
+        }
+
+        .history-list li::before {
+            content: "📅";
+            position: absolute;
+            left: 0;
+            color: #ffd966;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(255,200,100,0.5);
+        }
+
+        /* 双按钮区域 */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px 0 20px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            min-width: 240px;
+            background: rgba(0, 100, 150, 0.85);
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 16px 35px;
+            border-radius: 60px;
+            text-decoration: none;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .download-btn.old {
+            background: rgba(110, 80, 120, 0.85);
+        }
+
+        .download-btn.new {
+            background: rgba(30, 130, 150, 0.9);
+        }
+
+        .download-btn:hover {
+            transform: scale(1.03);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .download-btn.old:hover {
+            background: rgba(140, 100, 160, 0.95);
+        }
+
+        .download-btn.new:hover {
+            background: rgba(50, 160, 190, 0.95);
+        }
+
+        .btn-caption {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            margin-top: -10px;
+        }
+
+        /* 底部版权信息 */
+        .footer-copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+        }
+
+        /* 手机小屏调整 */
+        @media (max-width: 700px) {
+            .top-bar {
+                padding: 15px 0 10px;
+            }
+            .avatar {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .site-title {
+                font-size: 1.8rem;
+            }
+            .content-card {
+                padding: 25px 18px;
+            }
+            .software-title {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            .software-name {
+                font-size: 2rem;
+            }
+            .description {
+                font-size: 1rem;
+            }
+            .history-list li {
+                font-size: 1rem;
+            }
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            .download-btn {
+                width: 100%;
+                max-width: 300px;
+                font-size: 1.3rem;
+                padding: 14px 20px;
+            }
+        }
+
+        body {
+            background-color: #1e1a2b; /* 背景图备用 */
+        }
+    </style>
+</head>
+<body>
+    <div class="download-container">
+        <!-- 顶部透明条：头像 + SN の Blog -->
+        <div class="top-bar">
+            <img src="TX.png" alt="SN头像" class="avatar">
+            <span class="site-title">SN の Blog</span>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="content-card">
+            <!-- 软件标题区域，使用 WIN.png 作为图标（用户提供） -->
+            <div class="software-title">
+                <img src="WIN.png" alt="Windows图标" class="software-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'70\' height=\'70\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%230078D4\' rx=\'20\' /%3E%3Ctext x=\'50\' y=\'68\' font-size=\'48\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'Arial\'%3EWin%3C/text%3E%3C/svg%3E';">
+                <span class="software-name">Windows 操作系统</span>
+            </div>
+
+            <!-- 介绍 Windows 历史 -->
+            <div class="description">
+                <p>Microsoft Windows 是全球使用最广泛的个人电脑操作系统，其发展历史跨越数十年，深刻影响了现代计算。以下是一些关键里程碑：</p>
+                
+                <ul class="history-list">
+                    <li><strong>1985年</strong> - Windows 1.0 发布：微软首次图形界面操作系统，基于MS-DOS。</li>
+                    <li><strong>1990年</strong> - Windows 3.0 大获成功：改进的界面和内存管理，奠定市场地位。</li>
+                    <li><strong>1995年</strong> - Windows 95 革命：引入“开始”菜单、任务栏，以及即插即用功能。</li>
+                    <li><strong>2000年</strong> - Windows 2000 面向商业，Windows Me 面向家庭用户。</li>
+                    <li><strong>2001年</strong> - Windows XP 发布：经典稳定版本，统治桌面长达十年。</li>
+                    <li><strong>2007年</strong> - Windows Vista：全新Aero界面，但硬件要求高引发争议。</li>
+                    <li><strong>2009年</strong> - Windows 7：改进Vista的不足，快速成为主流。</li>
+                    <li><strong>2012年</strong> - Windows 8：引入Modern UI和开始屏幕，取消开始菜单（后恢复）。</li>
+                    <li><strong>2015年</strong> - Windows 10：回归开始菜单，提供“Windows即服务”更新模式。</li>
+                    <li><strong>2021年</strong> - Windows 11：全新UI设计，增强多任务与安全特性，至今持续更新。</li>
+                </ul>
+
+                <p>Windows 的每一次迭代都伴随着技术创新和用户体验的变革。无论您是怀旧经典版本，还是需要最新的系统镜像，可以通过下面资源站获取。</p>
+            </div>
+
+            <!-- 双跳转按钮：旧版 msdn.itellyou.cn，新版 next.itellyou.cn -->
+            <div class="button-group">
+                <a href="https://msdn.itellyou.cn/" class="download-btn old" target="_blank" rel="noopener noreferrer">📀 旧版资源站</a>
+                <a href="https://next.itellyou.cn/" class="download-btn new" target="_blank" rel="noopener noreferrer">✨ 新版资源站</a>
+            </div>
+            <p class="btn-caption">点击按钮将跳转到外部资源站 • 原版/镜像信息站</p>
+        </div>
+
+        <!-- 底部版权 -->
+        <div class="footer-copyright">
+            Copyright © 2026 SN のBlog All Rights Reserved
+        </div>
+    </div>
+
+    <script>
+        // 预留简单交互（如有需要可在此添加）
+    </script>
+</body>
+</html>

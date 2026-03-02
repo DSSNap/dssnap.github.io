@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SN の Blog 镜像站 · 登录</title>
+    <link rel="icon" href="Favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('Background.png') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 使用flex-wrap允许在小屏幕时换行 */
+        .login-wrapper {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: 30px;
+            max-width: 900px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0 24px 30px;
+            border-radius: 24px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 550px;
+            flex: 1 1 400px;
+        }
+
+        /* 右侧扫码卡片 - 调大尺寸 */
+        .qr-side {
+            flex: 0 0 200px;           /* 增大基础宽度 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 40px;
+            padding: 30px 20px;
+            margin: 80px 0 30px 0;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+            height: fit-content;
+            min-width: 180px;
+        }
+
+        .qr-icon {
+            width: 120px;               /* 图标变大 */
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+            background: rgba(255,255,255,0.15);
+            border-radius: 28px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .qr-text {
+            color: white;
+            font-size: 1.1rem;          /* 文字稍大 */
+            text-align: center;
+            font-weight: 500;
+            text-shadow: 0 2px 6px black;
+            line-height: 1.5;
+            border-top: 1px dashed rgba(255,255,255,0.3);
+            padding-top: 16px;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        /* 左下角社交图标区域 - 直线平铺 */
+        .social-bar {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 18px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding: 12px 22px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1200;
+        }
+
+        .social-item {
+            position: relative;
+            display: flex;
+            line-height: 0;  /* 防止高度异常 */
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 5px black);
+            opacity: 0.9;
+            transition: transform 0.2s, opacity 0.2s;
+            cursor: pointer;
+        }
+        .social-icon:hover {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+
+        /* 自定义提示样式 (取代原生title, 更美观) */
+        .custom-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(4px);
+            color: #ffd966;
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            white-space: nowrap;
+            border: 1px solid rgba(255,215,0,0.4);
+            box-shadow: 0 5px 15px black;
+            pointer-events: none;
+            z-index: 1300;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .social-item:hover .custom-tooltip {
+            opacity: 1;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 20px 0 15px 0;
+            margin-bottom: 10px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            margin-right: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+            letter-spacing: 1px;
+            line-height: 1.2;
+            background: transparent;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #fff;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+            margin-bottom: 8px;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .sub-title {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #f0f0f0;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+            margin-bottom: 32px;
+            text-align: center;
+            word-break: break-word;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            padding-bottom: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 40px;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+            transition: border 0.2s, background 0.2s;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .input-field:focus {
+            border-color: #fff;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 300;
+            font-size: 0.95rem;
+        }
+
+        .slider-container {
+            margin: 16px 0 20px 0;
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+
+        .slider-bg {
+            width: 100%;
+            height: 54px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            transition: border 0.2s, background 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slider-thumb {
+            width: 60px;
+            height: 46px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e2b3a;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: background 0.1s, transform 0.1s;
+            border: 1px solid rgba(255,255,255,0.7);
+            margin-left: 4px;
+            z-index: 3;
+            position: relative;
+        }
+
+        .slider-thumb:active {
+            cursor: grabbing;
+            background: white;
+            transform: scale(0.98);
+        }
+
+        .slider-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: rgba(70, 130, 200, 0.3);
+            border-radius: 40px;
+            width: 0%;
+            pointer-events: none;
+            z-index: 1;
+            backdrop-filter: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: inset 0 0 8px rgba(255,255,240,0.2);
+        }
+
+        .slider-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 4px black;
+            pointer-events: none;
+            z-index: 2;
+            background: transparent;
+        }
+
+        .slider-thumb.dragging {
+            cursor: grabbing;
+            background: #ffffff;
+        }
+
+        .slider-bg.verified {
+            border-color: #6eda78;
+            background: rgba(0, 40, 0, 0.3);
+        }
+        .slider-thumb.verified {
+            background: #b9f6b9;
+            color: #1d4e1d;
+            cursor: default;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(25, 25, 35, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+            letter-spacing: 1px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            margin-top: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-btn:hover {
+            background: rgba(45, 45, 60, 0.85);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            pointer-events: none;
+            background: rgba(30, 30, 40, 0.6);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            min-height: 28px;
+            color: #ffde7a;
+            text-shadow: 0 1px 3px black;
+            font-weight: 500;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 400;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background: transparent;
+        }
+
+        .register-link {
+            display: none;
+        }
+
+        @media (max-width: 800px) {
+            .qr-side {
+                flex: 0 0 180px;
+                padding: 25px 15px;
+            }
+            .qr-icon {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .login-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            .qr-side {
+                flex-direction: row;
+                flex-basis: auto;
+                width: auto;
+                margin: 0 0 20px 0;
+                padding: 20px 30px;
+                gap: 25px;
+                max-width: 450px;
+            }
+            .qr-icon {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 0;
+            }
+            .qr-text {
+                border-top: none;
+                border-left: 1px dashed rgba(255,255,255,0.3);
+                padding-top: 0;
+                padding-left: 20px;
+                margin-top: 0;
+                width: auto;
+            }
+            .social-bar {
+                bottom: 15px;
+                left: 15px;
+                padding: 10px 18px;
+                gap: 14px;
+            }
+            .social-icon {
+                width: 34px;
+                height: 34px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 0 18px 25px;
+                min-height: 500px;
+            }
+            .top-bar {
+                padding: 15px 0 12px 0;
+            }
+            .avatar {
+                width: 34px;
+                height: 34px;
+                margin-right: 10px;
+            }
+            .site-title {
+                font-size: 1.5rem;
+            }
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+            .sub-title {
+                font-size: 1rem;
+                margin-bottom: 24px;
+            }
+            .input-field {
+                padding: 12px 16px;
+            }
+            .slider-bg {
+                height: 50px;
+            }
+            .slider-thumb {
+                width: 54px;
+                height: 42px;
+                font-size: 1.3rem;
+            }
+            .login-btn {
+                padding: 12px 16px;
+            }
+            .copyright {
+                margin-top: 20px;
+                padding-top: 12px;
+                font-size: 0.8rem;
+            }
+            .qr-side {
+                padding: 15px 20px;
+            }
+            .qr-icon {
+                width: 75px;
+                height: 75px;
+            }
+            .social-bar {
+                padding: 8px 16px;
+                gap: 12px;
+            }
+            .social-icon {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        body {
+            background-color: #1a1e2b;
+        }
+
+        /* ---------- 右下角音乐播放器样式 ---------- */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(20, 20, 30, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 12px 18px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: opacity 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .player-track-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 6px;
+            margin-bottom: 2px;
+        }
+
+        .track-name {
+            font-weight: 600;
+            color: #fff;
+            text-shadow: 0 1px 2px black;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        .ctrl-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.1s;
+            width: 44px;
+            height: 44px;
+        }
+        .ctrl-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .ctrl-btn:active {
+            transform: scale(0.95);
+        }
+        .ctrl-btn img {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 2px 4px black);
+            opacity: 0.9;
+        }
+
+        .playlist-select {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 10px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+            width: 100%;
+            backdrop-filter: none;
+            option {
+                background: #1e2a3a;
+                color: white;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .music-player {
+                width: 260px;
+                bottom: 12px;
+                right: 12px;
+                padding: 10px 14px;
+            }
+            .ctrl-btn img {
+                width: 24px;
+                height: 24px;
+            }
+            .track-name {
+                max-width: 140px;
+            }
+        }
+
+        /* ---------- 右上角弹窗提示 ---------- */
+        .music-tip {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 20, 30, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            border-radius: 60px;
+            padding: 12px 22px 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1), opacity 0.4s ease;
+            border-left: 4px solid gold;
+            max-width: 330px;
+            pointer-events: none;
+        }
+
+        .music-tip.show {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .music-tip.hide {
+            transform: translateX(120%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .tip-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            background: rgba(255,255,240,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,215,0,0.6);
+        }
+        .tip-icon img {
+            width: 30px;
+            height: 30px;
+            filter: drop-shadow(0 2px 5px #00000066);
+        }
+
+        .tip-content {
+            flex: 1;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            text-shadow: 0 1px 3px black;
+            letter-spacing: 0.3px;
+            line-height: 1.4;
+        }
+
+        .tip-content span {
+            font-size: 0.9rem;
+            color: #ffd966;
+            display: block;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .tip-close {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            pointer-events: auto;
+        }
+        .tip-close:hover {
+            background: rgba(255, 0, 0, 0.5);
+        }
+
+        @media (max-width: 500px) {
+            .music-tip {
+                top: 12px;
+                right: 12px;
+                padding: 8px 16px 8px 12px;
+                max-width: 280px;
+            }
+            .tip-icon {
+                width: 36px;
+                height: 36px;
+            }
+            .tip-icon img {
+                width: 26px;
+                height: 26px;
+            }
+            .tip-content {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 右上角音乐提示浮层 -->
+    <div class="music-tip" id="musicTip">
+        <div class="tip-icon">
+            <img src="music/MU.png" alt="音符">
+        </div>
+        <div class="tip-content">
+            🎵 点击播放键 开启背景音乐
+            <span>10秒后自动关闭</span>
+        </div>
+        <button class="tip-close" id="closeTipBtn" aria-label="关闭">✕</button>
+    </div>
+
+    <!-- 使用wrapper将登录框与右侧扫码区域并排 -->
+    <div class="login-wrapper">
+        <!-- 登录框主体 -->
+        <div class="login-container">
+            <div class="top-bar">
+                <img src="TX.png" alt="SN头像" class="avatar">
+                <span class="site-title">SN の Blog</span>
+            </div>
+
+            <div class="main-content">
+                <div class="welcome-title">欢迎进入SN の Blog の 镜像站</div>
+                <div class="sub-title">需要登录才能进入哦，需要账号和密码请到管理员获取</div>
+
+                <div class="input-group">
+                    <div class="input-label">📧 账号</div>
+                    <input type="text" id="username" class="input-field" placeholder="请输入账号" autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">🔒 密码</div>
+                    <input type="password" id="password" class="input-field" placeholder="请输入密码">
+                </div>
+
+                <!-- 滑动验证块 -->
+                <div class="slider-container" id="sliderBlock">
+                    <div class="slider-bg" id="sliderBg">
+                        <div class="slider-progress" id="sliderProgress"></div>
+                        <div class="slider-text" id="sliderHint">👉 请滑动滑块验证</div>
+                        <div class="slider-thumb" id="sliderThumb" draggable="false">→</div>
+                    </div>
+                </div>
+
+                <button class="login-btn" id="loginBtn" disabled>登 录</button>
+
+                <div class="message" id="loginMessage"></div>
+            </div>
+
+            <div class="copyright">Copyright © 2026 SN のBlog All Rights Reserved</div>
+        </div>
+
+        <!-- 右侧扫码区域 (已调大) -->
+        <div class="qr-side">
+            <img src="sm\sm.png" alt="扫码" class="qr-icon">
+            <div class="qr-text">扫描二维码获取账号和密码</div>
+        </div>
+    </div>
+
+    <!-- 左下角社交图标区域 - 直线平铺，邮箱/TG/GitHub已添加可点击链接，抖音/B站带悬浮提示 -->
+    <div class="social-bar">
+        <!-- 抖音 (带自定义提示) -->
+        <div class="social-item">
+            <img src="link\tik.png" alt="抖音" class="social-icon">
+            <span class="custom-tooltip">暂时无此账号，敬请期待</span>
+        </div>
+        <!-- B站 (带自定义提示) -->
+        <div class="social-item">
+            <img src="link\bili.png" alt="哔哩哔哩" class="social-icon">
+            <span class="custom-tooltip">暂时无此账号，敬请期待</span>
+        </div>
+        <!-- 邮箱 (可点击链接) -->
+        <div class="social-item">
+            <a href="mailto:1579497498@qq.com" target="_blank" style="display: flex; line-height: 0;">
+                <img src="link\ema.png" alt="邮箱" class="social-icon">
+            </a>
+        </div>
+        <!-- TG (可点击链接) -->
+        <div class="social-item">
+            <a href="https://t.me/kan781391" target="_blank" rel="noopener noreferrer" style="display: flex; line-height: 0;">
+                <img src="link\tg.png" alt="Telegram" class="social-icon">
+            </a>
+        </div>
+        <!-- Github (可点击链接) -->
+        <div class="social-item">
+            <a href="https://github.com/DSSNap/" target="_blank" rel="noopener noreferrer" style="display: flex; line-height: 0;">
+                <img src="link\GH.png" alt="GitHub" class="social-icon">
+            </a>
+        </div>
+    </div>
+
+    <!-- 右下角音乐播放器 -->
+    <div class="music-player" id="musicPlayer">
+        <div class="player-track-info">
+            <span class="track-name" id="currentTrackName">WAKE UP</span>
+            <span style="opacity:0.8; font-size:0.75rem;">🎵</span>
+        </div>
+        <select id="playlistSelect" class="playlist-select">
+            <option value="music\mu\WAKEUP.MP3" selected>1. WAKE UP</option>
+            <option value="music\mu\MHT1.MP3">2. 棉花糖 (至上励合)</option>
+            <option value="music\mu\MHT2.MP3">3. 棉花糖 (音符盒)</option>
+            <option value="music\mu\MHT3.MP3">4. 棉花糖 (翻唱)</option>
+            <option value="music\mu\ZNSB.MP3">5. 在你身边</option>
+        </select>
+        <div class="player-controls">
+            <button class="ctrl-btn" id="playBtn" title="播放"><img src="music\Play.png" alt="播放"></button>
+            <button class="ctrl-btn" id="pauseBtn" title="暂停"><img src="music\Pause.png" alt="暂停"></button>
+            <button class="ctrl-btn" id="stopBtn" title="重置/停止"><img src="music\Stop.png" alt="停止"></button>
+        </div>
+        <audio id="audioPlayer" src="WAKEUP.MP3" preload="auto"></audio>
+    </div>
+
+    <script>
+        (function() {
+            // 静态账号密码
+            const VALID_USERNAME = "Admin";
+            const VALID_PASSWORD = "Admin123456";
+
+            // DOM 元素
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('loginMessage');
+
+            // 滑块元素
+            const sliderBg = document.getElementById('sliderBg');
+            const sliderThumb = document.getElementById('sliderThumb');
+            const sliderProgress = document.getElementById('sliderProgress');
+            const sliderHint = document.getElementById('sliderHint');
+
+            // 滑块状态
+            let isSliderVerified = false;
+            let isDragging = false;
+            let startX = 0;
+            let thumbCurrentX = 4;
+            const thumbMinX = 4;
+            let thumbMaxX = 0;
+
+            // 辅助函数
+            const trimValue = (val) => (val || '').trim();
+
+            // 滑块逻辑 ====================
+            function updateSliderBounds() {
+                const bgRect = sliderBg.getBoundingClientRect();
+                const thumbRect = sliderThumb.getBoundingClientRect();
+                thumbMaxX = bgRect.width - thumbRect.width - 4; 
+                if (thumbMaxX < 0) thumbMaxX = 0;
+
+                if (isSliderVerified) {
+                    thumbCurrentX = thumbMaxX;
+                } else {
+                    if (thumbCurrentX > thumbMaxX || thumbCurrentX < thumbMinX) {
+                        resetSliderToUnverified();
+                    }
+                }
+                applyThumbPosition();
+            }
+
+            function applyThumbPosition() {
+                sliderThumb.style.marginLeft = '0';
+                sliderThumb.style.transform = `translateX(${thumbCurrentX - 4}px)`;
+                let progressPercent = 0;
+                if (thumbMaxX > thumbMinX) {
+                    progressPercent = ((thumbCurrentX - thumbMinX) / (thumbMaxX - thumbMinX)) * 100;
+                }
+                if (progressPercent > 100) progressPercent = 100;
+                if (progressPercent < 0) progressPercent = 0;
+                sliderProgress.style.width = progressPercent + '%';
+
+                if (!isSliderVerified) {
+                    if (progressPercent >= 99) {
+                        sliderHint.innerText = '松开完成验证';
+                    } else {
+                        sliderHint.innerText = '👉 请滑动滑块验证';
+                    }
+                } else {
+                    sliderHint.innerText = '✓ 验证通过';
+                }
+            }
+
+            function resetSliderToUnverified() {
+                isSliderVerified = false;
+                thumbCurrentX = thumbMinX;
+                sliderBg.classList.remove('verified');
+                sliderThumb.classList.remove('verified');
+                sliderHint.innerText = '👉 请滑动滑块验证';
+                applyThumbPosition();
+                updateLoginButtonState();
+            }
+
+            function setVerified() {
+                isSliderVerified = true;
+                thumbCurrentX = thumbMaxX;
+                sliderBg.classList.add('verified');
+                sliderThumb.classList.add('verified');
+                sliderHint.innerText = '✓ 验证通过';
+                applyThumbPosition();
+                updateLoginButtonState();
+            }
+
+            function updateLoginButtonState() {
+                loginBtn.disabled = !isSliderVerified;
+            }
+
+            // 登录执行
+            function performLogin() {
+                const enteredUsername = trimValue(usernameInput.value);
+                const enteredPassword = passwordInput.value.trim();
+
+                if (enteredUsername === VALID_USERNAME && enteredPassword === VALID_PASSWORD) {
+                    messageDiv.style.color = '#b9f6b9';
+                    messageDiv.textContent = '登录成功，正在跳转...';
+                    setTimeout(() => {
+                        // 修改后的跳转链接：download\Download_Index.html (区分大小写)
+                        window.location.href = 'download\\Download_Index.html';
+                    }, 300);
+                } else {
+                    messageDiv.style.color = '#ffde7a';
+                    messageDiv.textContent = '账号或密码错误，请重新输入。';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                    resetSliderToUnverified();
+                }
+            }
+
+            // 滑块事件
+            function onMouseDown(e) {
+                if (isSliderVerified) return;
+                e.preventDefault();
+                isDragging = true;
+                sliderThumb.classList.add('dragging');
+                startX = e.clientX;
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            }
+
+            function onMouseMove(e) {
+                if (!isDragging || isSliderVerified) return;
+                e.preventDefault();
+                const bgRect = sliderBg.getBoundingClientRect();
+                const thumbRect = sliderThumb.getBoundingClientRect();
+                const relativeX = e.clientX - bgRect.left;
+                let newPos = relativeX - thumbRect.width / 2;
+                if (newPos < thumbMinX) newPos = thumbMinX;
+                if (newPos > thumbMaxX) newPos = thumbMaxX;
+                thumbCurrentX = newPos;
+                applyThumbPosition();
+                startX = e.clientX; 
+            }
+
+            function onMouseUp(e) {
+                if (!isDragging || isSliderVerified) {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                    return;
+                }
+                e.preventDefault();
+                isDragging = false;
+                sliderThumb.classList.remove('dragging');
+
+                if (thumbCurrentX >= thumbMaxX - 2) {
+                    setVerified();
+                } else {
+                    resetSliderToUnverified();
+                }
+
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+
+            // 触摸事件
+            function onTouchStart(e) {
+                if (isSliderVerified) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                if (!touch) return;
+                isDragging = true;
+                sliderThumb.classList.add('dragging');
+                startX = touch.clientX;
+                document.addEventListener('touchmove', onTouchMove, { passive: false });
+                document.addEventListener('touchend', onTouchEnd);
+                document.addEventListener('touchcancel', onTouchCancel);
+            }
+
+            function onTouchMove(e) {
+                if (!isDragging || isSliderVerified) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                if (!touch) return;
+                const bgRect = sliderBg.getBoundingClientRect();
+                const thumbRect = sliderThumb.getBoundingClientRect();
+                const relativeX = touch.clientX - bgRect.left;
+                let newPos = relativeX - thumbRect.width / 2;
+                if (newPos < thumbMinX) newPos = thumbMinX;
+                if (newPos > thumbMaxX) newPos = thumbMaxX;
+                thumbCurrentX = newPos;
+                applyThumbPosition();
+            }
+
+            function onTouchEnd(e) {
+                if (!isDragging || isSliderVerified) {
+                    document.removeEventListener('touchmove', onTouchMove);
+                    document.removeEventListener('touchend', onTouchEnd);
+                    document.removeEventListener('touchcancel', onTouchCancel);
+                    return;
+                }
+                e.preventDefault();
+                isDragging = false;
+                sliderThumb.classList.remove('dragging');
+
+                if (thumbCurrentX >= thumbMaxX - 2) {
+                    setVerified();
+                } else {
+                    resetSliderToUnverified();
+                }
+
+                document.removeEventListener('touchmove', onTouchMove);
+                document.removeEventListener('touchend', onTouchEnd);
+                document.removeEventListener('touchcancel', onTouchCancel);
+            }
+
+            function onTouchCancel(e) {
+                onTouchEnd(e);
+            }
+
+            function initSlider() {
+                updateSliderBounds();
+                resetSliderToUnverified();
+                sliderThumb.addEventListener('mousedown', onMouseDown);
+                sliderThumb.addEventListener('touchstart', onTouchStart, { passive: false });
+                sliderThumb.addEventListener('dragstart', (e) => e.preventDefault());
+                window.addEventListener('resize', updateSliderBounds);
+            }
+
+            loginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!isSliderVerified) {
+                    messageDiv.textContent = '请先完成滑块验证';
+                    return;
+                }
+                performLogin();
+            });
+
+            const inputs = [usernameInput, passwordInput];
+            inputs.forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (isSliderVerified) {
+                            performLogin();
+                        } else {
+                            messageDiv.textContent = '请先完成滑块验证';
+                        }
+                    }
+                });
+            });
+
+            usernameInput.addEventListener('input', () => { messageDiv.textContent = ''; });
+            passwordInput.addEventListener('input', () => { messageDiv.textContent = ''; });
+
+            // 启动滑块
+            initSlider();
+            usernameInput.focus();
+
+            // ========== 音乐播放器集成 ==========
+            const audio = document.getElementById('audioPlayer');
+            const trackNameSpan = document.getElementById('currentTrackName');
+            const playlist = document.getElementById('playlistSelect');
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+
+            const trackNames = {
+                'WAKEUP.MP3': 'WAKE UP',
+                'MHT1.MP3': '棉花糖 (至上励合)',
+                'MHT2.MP3': '棉花糖 (音符盒)',
+                'MHT3.MP3': '棉花糖 (翻唱)',
+                'ZNSB.MP3': '在你身边'
+            };
+
+            function changeTrack() {
+                const selected = playlist.value;
+                audio.src = selected;
+                trackNameSpan.textContent = trackNames[selected] || '未知曲目';
+            }
+
+            playlist.addEventListener('change', changeTrack);
+
+            playBtn.addEventListener('click', () => {
+                audio.play().catch(e => console.log('播放失败', e));
+            });
+
+            pauseBtn.addEventListener('click', () => {
+                audio.pause();
+            });
+
+            stopBtn.addEventListener('click', () => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+
+            trackNameSpan.textContent = trackNames[playlist.value] || 'WAKE UP';
+
+            // ========== 右上角音乐提示 ==========
+            const tip = document.getElementById('musicTip');
+            const closeTipBtn = document.getElementById('closeTipBtn');
+            let tipTimeout;
+
+            function showTip() {
+                tip.classList.remove('hide');
+                tip.classList.add('show');
+                clearTimeout(tipTimeout);
+                tipTimeout = setTimeout(() => {
+                    hideTip();
+                }, 10000);
+            }
+
+            function hideTip() {
+                tip.classList.remove('show');
+                tip.classList.add('hide');
+            }
+
+            closeTipBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                hideTip();
+                clearTimeout(tipTimeout);
+            });
+
+            window.addEventListener('load', () => {
+                setTimeout(showTip, 200);
+            });
+
+            playBtn.addEventListener('click', () => {
+                hideTip();
+                clearTimeout(tipTimeout);
+            });
+        })();
+    </script>
+</body>
+</html>

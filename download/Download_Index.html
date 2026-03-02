@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SN の Blog の 镜像站 主页</title>
+    <!-- 网页图标 -->
+    <link rel="icon" href="../Favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            /* 新背景图片：Background1.png，透明，无毛玻璃特效 */
+            background: url('Background1.png') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            padding: 16px;
+            position: relative;
+        }
+
+        /* 主容器 - 透明卡片 */
+        .home-container {
+            width: 100%;
+            max-width: 1100px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0 20px 40px;
+            border-radius: 32px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 顶部透明条 - 完全透明，包含头像和站点名称 */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0 15px 0;
+            margin-bottom: 10px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: transparent;
+            margin-right: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            background: transparent;
+        }
+
+        /* 退出登录按钮 */
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 8px 18px 8px 14px;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: rgba(40, 40, 50, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .logout-btn:active {
+            transform: scale(0.97);
+        }
+
+        .logout-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px black);
+        }
+
+        .logout-text {
+            font-size: 1rem;
+            font-weight: 500;
+            text-shadow: 0 1px 3px black;
+        }
+
+        /* 标题区域 */
+        .header-title {
+            text-align: center;
+            margin: 20px 0 10px;
+        }
+
+        .welcome-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+
+        .sub-title {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #f8f8f8;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+            word-break: break-word;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            padding-bottom: 20px;
+        }
+
+        /* 板块网格：4个板块 + 1个更多板块，使用grid布局，自动适应手机 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            margin: 20px 0 40px;
+            flex: 1;
+        }
+
+        /* 每个板块卡片 - 半透明背景但无模糊，保持可读性 */
+        .card {
+            background: rgba(20, 20, 30, 0.65);
+            border-radius: 28px;
+            padding: 22px 15px;
+            text-align: center;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .card:hover {
+            background: rgba(35, 35, 50, 0.75);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 板块图片 */
+        .card-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+            background: transparent;
+        }
+
+        /* 板块标题 */
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        /* 下载提示小字 */
+        .card-sub {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: #ddd;
+        }
+
+        /* 更多板块卡片稍微不同风格，加个特殊标记 */
+        .card.more {
+            background: rgba(40, 30, 50, 0.65);
+            border: 1px dashed rgba(255, 215, 0, 0.5);
+        }
+
+        .card.more:hover {
+            background: rgba(60, 45, 75, 0.75);
+        }
+
+        /* 底部版权信息 */
+        .footer-copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+        }
+
+        /* 手机小屏调整 */
+        @media (max-width: 600px) {
+            .top-bar {
+                padding: 15px 0 10px;
+            }
+            .avatar {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .site-title {
+                font-size: 1.8rem;
+            }
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+            .sub-title {
+                font-size: 1.1rem;
+            }
+            .grid-container {
+                gap: 15px;
+            }
+            .card-img {
+                width: 60px;
+                height: 60px;
+            }
+            .card-title {
+                font-size: 1.1rem;
+            }
+            .logout-btn {
+                padding: 6px 14px 6px 10px;
+            }
+            .logout-icon {
+                width: 20px;
+                height: 20px;
+            }
+            .logout-text {
+                font-size: 0.9rem;
+            }
+        }
+
+        body {
+            background-color: #1e1a2b;
+        }
+
+        /* ---------- 右下角社交图标区域 (与登录页风格一致) ---------- */
+        .social-bar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;           /* 改到右下角，与登录页左下角区分，避免重叠 */
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 18px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            padding: 12px 22px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1200;
+        }
+
+        .social-item {
+            position: relative;
+            display: flex;
+            line-height: 0;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 5px black);
+            opacity: 0.9;
+            transition: transform 0.2s, opacity 0.2s;
+            cursor: pointer;
+        }
+        .social-icon:hover {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+
+        /* 自定义提示样式 */
+        .custom-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 30, 40, 0.95);
+            backdrop-filter: blur(4px);
+            color: #ffd966;
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            white-space: nowrap;
+            border: 1px solid rgba(255,215,0,0.4);
+            box-shadow: 0 5px 15px black;
+            pointer-events: none;
+            z-index: 1300;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .social-item:hover .custom-tooltip {
+            opacity: 1;
+        }
+
+        /* 链接样式重置 */
+        .social-item a {
+            display: flex;
+            line-height: 0;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .social-bar {
+                bottom: 15px;
+                right: 15px;
+                padding: 8px 16px;
+                gap: 12px;
+            }
+            .social-icon {
+                width: 32px;
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="home-container">
+        <!-- 顶部透明条：头像 + SN の Blog + 退出登录按钮 -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <img src="tb\TX.png" alt="SN头像" class="avatar">
+                <span class="site-title">SN の Blog</span>
+            </div>
+            
+            <!-- 退出登录按钮 - 点击返回登录页面 -->
+            <a href="../index.html" class="logout-btn" title="退出登录">
+                <img src="logoff.png" alt="退出" class="logout-icon">
+                <span class="logout-text">退出</span>
+            </a>
+        </div>
+
+        <!-- 标题区域 -->
+        <div class="header-title">
+            <div class="welcome-title">欢迎进入SN の Blog の 镜像站</div>
+            <div class="sub-title">这些都是必备的软件哦 ヾ(≧▽≦*)o</div>
+        </div>
+
+        <!-- 板块网格：4个指定板块 + 1个更多板块 -->
+        <div class="grid-container">
+            <!-- 1. VMware 下载板块，点击跳转 VM.html，图片 VM.PNG -->
+            <a href="html\VM.html" class="card" title="VMware 下载">
+                <img src="tb\VM.PNG" alt="VMware" class="card-img">
+                <div class="card-title">VMware 下载</div>
+                <div class="card-sub">虚拟机平台</div>
+            </a>
+
+            <!-- 2. VNC Server 下载，跳转 VNCS.html，图片 VNCS.png -->
+            <a href="html\VNCS.html" class="card" title="VNC Server 下载">
+                <img src="tb\VNCS.png" alt="VNC Server" class="card-img">
+                <div class="card-title">VNC Server 下载</div>
+                <div class="card-sub">远程服务端</div>
+            </a>
+
+            <!-- 3. VNC Viewer 下载，跳转 VNCCV.html，图片 VNCV.png -->
+            <a href="html\VNCCV.html" class="card" title="VNC Viewer 下载">
+                <img src="tb\VNCV.png" alt="VNC Viewer" class="card-img">
+                <div class="card-title">VNC Viewer 下载</div>
+                <div class="card-sub">远程客户端</div>
+            </a>
+
+            <!-- 4. Windows镜像下载，跳转 Win.html，图片 WIN.png -->
+            <a href="html\Win.html" class="card" title="Windows镜像下载">
+                <img src="tb\WIN.png" alt="Windows镜像" class="card-img">
+                <div class="card-title">Windows镜像下载</div>
+                <div class="card-sub">系统安装</div>
+            </a>
+
+            <!-- 5. 更多板块（特殊样式） -->
+            <a href="#" class="card more" title="更多板块">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2344455e' stroke='%23ffd966' stroke-width='3' /%3E%3Ctext x='50' y='70' font-size='70' text-anchor='middle' fill='%23ffd966' font-family='Arial'%3E%2B%3C/text%3E%3C/svg%3E"
+                     alt="更多板块" class="card-img">
+                <div class="card-title">更多板块</div>
+                <div class="card-sub">敬请期待</div>
+            </a>
+        </div>
+
+        <!-- 底部版权 -->
+        <div class="footer-copyright">
+            Copyright © 2026 SN のBlog All Rights Reserved
+        </div>
+    </div>
+
+    <!-- 右下角社交图标区域 (与登录页风格一致，已移至右下角) -->
+    <div class="social-bar">
+        <!-- 抖音 (带自定义提示) -->
+        <div class="social-item">
+            <img src="../link\tik.png" alt="抖音" class="social-icon">
+            <span class="custom-tooltip">暂时无此账号，敬请期待</span>
+        </div>
+        <!-- B站 (带自定义提示) -->
+        <div class="social-item">
+            <img src="../link\bili.png" alt="哔哩哔哩" class="social-icon">
+            <span class="custom-tooltip">暂时无此账号，敬请期待</span>
+        </div>
+        <!-- 邮箱 (可点击链接) -->
+        <div class="social-item">
+            <a href="mailto:1579497498@qq.com" target="_blank" rel="noopener noreferrer">
+                <img src="../link\ema.png" alt="邮箱" class="social-icon">
+            </a>
+        </div>
+        <!-- TG (可点击链接) -->
+        <div class="social-item">
+            <a href="https://t.me/kan781391" target="_blank" rel="noopener noreferrer">
+                <img src="../link\tg.png" alt="Telegram" class="social-icon">
+            </a>
+        </div>
+        <!-- Github (可点击链接) -->
+        <div class="social-item">
+            <a href="https://github.com/DSSNap/" target="_blank" rel="noopener noreferrer">
+                <img src="../link\GH.png" alt="GitHub" class="social-icon">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 可以添加一些交互，但无需登录逻辑，仅作展示
+        // 保证所有链接在新版本中正常跳转
+    </script>
+</body>
+</html>

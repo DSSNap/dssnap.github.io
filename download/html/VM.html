@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SN の Blog の 镜像站 VMware下载</title>
+    <!-- 网页图标 -->
+    <link rel="icon" href="Favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            /* 背景图片：Background1.png，透明，无毛玻璃特效 */
+            background: url('Background1.png') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            padding: 16px;
+        }
+
+        /* 主容器 - 透明卡片 */
+        .download-container {
+            width: 100%;
+            max-width: 900px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0 24px 40px;
+            border-radius: 32px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部透明条 - 完全透明，包含头像和站点名称 */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 20px 0 15px 0;
+            margin-bottom: 20px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: transparent;
+            margin-right: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            background: transparent;
+        }
+
+        /* 内容卡片 - 半透明背景介绍区，无模糊 */
+        .content-card {
+            background: rgba(20, 20, 30, 0.75);
+            border-radius: 36px;
+            padding: 35px 30px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            margin: 20px 0 30px;
+        }
+
+        /* 软件标题 */
+        .software-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            padding-bottom: 20px;
+        }
+
+        .software-icon {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        }
+
+        .software-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* 介绍段落 */
+        .description {
+            color: #f0f0f0;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            margin-bottom: 30px;
+        }
+
+        .description p {
+            margin-bottom: 18px;
+        }
+
+        .feature-list {
+            list-style-type: none;
+            margin: 25px 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 12px;
+            padding-left: 28px;
+            position: relative;
+            font-size: 1.1rem;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #a3d8ff;
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-shadow: 0 0 5px rgba(0,160,255,0.5);
+        }
+
+        /* 跳转按钮区域 */
+        .button-area {
+            text-align: center;
+            margin: 35px 0 20px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: rgba(0, 100, 200, 0.8);
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 18px 50px;
+            border-radius: 60px;
+            text-decoration: none;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 2px;
+        }
+
+        .download-btn:hover {
+            background: rgba(30, 140, 255, 0.9);
+            transform: scale(1.03);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 底部版权信息 */
+        .footer-copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+        }
+
+        /* 手机小屏调整 */
+        @media (max-width: 600px) {
+            .top-bar {
+                padding: 15px 0 10px;
+            }
+            .avatar {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .site-title {
+                font-size: 1.8rem;
+            }
+            .content-card {
+                padding: 25px 18px;
+            }
+            .software-title {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            .software-name {
+                font-size: 2rem;
+            }
+            .description {
+                font-size: 1rem;
+            }
+            .feature-list li {
+                font-size: 1rem;
+            }
+            .download-btn {
+                font-size: 1.3rem;
+                padding: 15px 30px;
+            }
+        }
+
+        body {
+            background-color: #1e1a2b; /* 背景图备用 */
+        }
+    </style>
+</head>
+<body>
+    <div class="download-container">
+        <!-- 顶部透明条：头像 + SN の Blog -->
+        <div class="top-bar">
+            <img src="TX.png" alt="SN头像" class="avatar">
+            <span class="site-title">SN の Blog</span>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="content-card">
+            <!-- 软件标题区域，包含VMware图标（没有提供VMware图标，但可以用通用图标，为符合“顺便介绍一下VMware”，我们使用一个VMware的简易图或文字图标，但建议放个图标，用户可自行替换。此处使用一个data:image生成VMware风格的简单图标，也可后续替换为VM.PNG之类的，但避免文件缺失，我内置一个简约图标。实际使用时可替换src为真实图片如VM.PNG。这里我用一个VMware风格的简单SVG。当然也可以直接使用文本，但为了美观放一个基础图标。）
+            另外用户可能有自己的VM.PNG，我们引用“VM.PNG”作为图标，这样如果存在就可以显示。与上一轮保持一致，用VM.PNG作为图标文件。如果没有，则显示破损，但用户会提供。我们按VM.PNG来。
+            -->
+            <div class="software-title">
+                <img src="VM.PNG" alt="VMware图标" class="software-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'70\' height=\'70\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%233a4a6e\' rx=\'20\' /%3E%3Ctext x=\'50\' y=\'68\' font-size=\'48\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'Arial\'%3EVM%3C/text%3E%3C/svg%3E';">
+                <span class="software-name">VMware 专业版</span>
+            </div>
+
+            <!-- 介绍 VMware -->
+            <div class="description">
+                <p>VMware 是全球领先的虚拟化软件，它允许您在一台物理计算机上同时运行多个操作系统（如 Windows、Linux、macOS 虚拟机）。无论是开发测试、跨平台工作，还是搭建服务器环境，VMware 都能提供高效、稳定、隔离的虚拟化解决方案。</p>
+                
+                <ul class="feature-list">
+                    <li><strong>强大兼容</strong> - 支持数百种操作系统，无缝运行不同系统上的应用程序。</li>
+                    <li><strong>高性能</strong> - 接近原生的运行速度，支持 3D 加速、多核处理器和海量内存。</li>
+                    <li><strong>快照与克隆</strong> - 轻松保存系统状态，随时还原，快速部署多个相同环境。</li>
+                    <li><strong>网络模拟</strong> - 自定义虚拟网络，模拟真实服务器架构。</li>
+                    <li><strong>安全隔离</strong> - 虚拟机与主机隔离，适合测试恶意软件或不稳定环境。</li>
+                </ul>
+
+                <p>无论您是开发者、IT 管理员还是普通用户，VMware 都是不可或缺的效率工具。下方按钮可跳转至第三方资源页获取更多信息及下载地址。</p>
+            </div>
+
+            <!-- 跳转按钮，链接至 https://www.52pojie.cn/thread-1965033-1-1.html -->
+            <div class="button-area">
+                <a href="https://www.52pojie.cn/thread-1965033-1-1.html" class="download-btn" target="_blank" rel="noopener noreferrer">前往下载页面</a>
+            </div>
+            <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 15px;">点击按钮将跳转到外部链接 • 52pojie.cn</p>
+        </div>
+
+        <!-- 底部版权 -->
+        <div class="footer-copyright">
+            Copyright © 2026 SN のBlog All Rights Reserved
+        </div>
+    </div>
+
+    <script>
+        // 可添加任何交互，目前无复杂逻辑
+    </script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>SN の Blog の 镜像站 VNC Viewer 下载</title>
+    <!-- 网页图标 -->
+    <link rel="icon" href="Favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            /* 背景图片：Background1.png，透明，无毛玻璃特效 */
+            background: url('Background1.png') no-repeat center center fixed;
+            background-size: cover;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            padding: 16px;
+        }
+
+        /* 主容器 - 透明卡片 */
+        .download-container {
+            width: 100%;
+            max-width: 900px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0 24px 40px;
+            border-radius: 32px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部透明条 - 完全透明，包含头像和站点名称 */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 20px 0 15px 0;
+            margin-bottom: 20px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            background: transparent;
+            margin-right: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .site-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            background: transparent;
+        }
+
+        /* 内容卡片 - 半透明背景介绍区，无模糊 */
+        .content-card {
+            background: rgba(20, 20, 30, 0.75);
+            border-radius: 36px;
+            padding: 35px 30px;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            margin: 20px 0 30px;
+        }
+
+        /* 软件标题 */
+        .software-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            padding-bottom: 20px;
+        }
+
+        .software-icon {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        }
+
+        .software-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* 介绍段落 */
+        .description {
+            color: #f0f0f0;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            margin-bottom: 30px;
+        }
+
+        .description p {
+            margin-bottom: 18px;
+        }
+
+        .feature-list {
+            list-style-type: none;
+            margin: 25px 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 12px;
+            padding-left: 28px;
+            position: relative;
+            font-size: 1.1rem;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #7cb9e8;
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-shadow: 0 0 5px rgba(100, 180, 255, 0.5);
+        }
+
+        /* 跳转按钮区域 */
+        .button-area {
+            text-align: center;
+            margin: 35px 0 20px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: rgba(60, 120, 180, 0.85);
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 700;
+            padding: 18px 50px;
+            border-radius: 60px;
+            text-decoration: none;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: background 0.2s, transform 0.2s;
+            letter-spacing: 2px;
+        }
+
+        .download-btn:hover {
+            background: rgba(80, 150, 220, 0.95);
+            transform: scale(1.03);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 底部版权信息 */
+        .footer-copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+        }
+
+        /* 手机小屏调整 */
+        @media (max-width: 600px) {
+            .top-bar {
+                padding: 15px 0 10px;
+            }
+            .avatar {
+                width: 40px;
+                height: 40px;
+                margin-right: 10px;
+            }
+            .site-title {
+                font-size: 1.8rem;
+            }
+            .content-card {
+                padding: 25px 18px;
+            }
+            .software-title {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            .software-name {
+                font-size: 2rem;
+            }
+            .description {
+                font-size: 1rem;
+            }
+            .feature-list li {
+                font-size: 1rem;
+            }
+            .download-btn {
+                font-size: 1.3rem;
+                padding: 15px 30px;
+            }
+        }
+
+        body {
+            background-color: #1e1a2b; /* 背景图备用 */
+        }
+    </style>
+</head>
+<body>
+    <div class="download-container">
+        <!-- 顶部透明条：头像 + SN の Blog -->
+        <div class="top-bar">
+            <img src="TX.png" alt="SN头像" class="avatar">
+            <span class="site-title">SN の Blog</span>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="content-card">
+            <!-- 软件标题区域，使用 VNCV.png 作为图标（用户提供） -->
+            <div class="software-title">
+                <img src="VNCV.png" alt="VNC Viewer图标" class="software-icon" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'70\' height=\'70\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%233a6e8f\' rx=\'20\' /%3E%3Ctext x=\'50\' y=\'68\' font-size=\'48\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'Arial\'%3EVV%3C/text%3E%3C/svg%3E';">
+                <span class="software-name">VNC Viewer</span>
+            </div>
+
+            <!-- 介绍 VNC Viewer -->
+            <div class="description">
+                <p><strong>VNC Viewer</strong> 是 VNC (Virtual Network Computing) 系统的客户端软件，由 RealVNC 公司开发。它用于连接远程计算机上运行的 VNC Server，让您可以实时查看并控制远程桌面。无论您是需要远程办公、协助他人解决问题，还是管理无头服务器，VNC Viewer 都是您进入远程世界的窗口。</p>
+                
+                <ul class="feature-list">
+                    <li><strong>简洁直观的界面</strong> - 清晰的连接管理器和流畅的桌面视图，上手即用。</li>
+                    <li><strong>跨平台支持</strong> - 提供 Windows、macOS、Linux、iOS、Android 和 Raspberry Pi 版本，随时随地连接。</li>
+                    <li><strong>安全的连接</strong> - 支持 TLS 加密和 RealVNC 的端到端认证，保护您的会话安全。</li>
+                    <li><strong>智能编码与优化</strong> - 自动适应网络条件，在低带宽下也能保持可用性和响应速度。</li>
+                    <li><strong>云服务集成</strong> - 通过 RealVNC 云连接，无需手动配置网络或端口转发（需配合云账户）。</li>
+                    <li><strong>多显示器支持</strong> - 轻松切换或同时查看远程计算机的多个屏幕。</li>
+                </ul>
+
+                <p>VNC Viewer 让远程桌面访问变得简单、安全且高效。下方按钮可跳转至 RealVNC 官方网站下载适合您设备的版本。</p>
+            </div>
+
+            <!-- 跳转按钮 - 使用官方通用下载页，您可以根据需要替换为正确的链接 -->
+            <div class="button-area">
+                <a href="https://www.realvnc.com/en/connect/download/viewer/" class="download-btn" target="_blank" rel="noopener noreferrer">前往官方下载</a>
+            </div>
+            <p style="text-align: center; color: rgba(255,255,255,0.6); margin-top: 15px;">点击按钮将跳转到 RealVNC Viewer 官方下载页</p>
+            <!-- 提示信息：原链接（/viewer/l）无法访问，已使用通用下载页替换。如果需要特定页面，请修改上面的href属性。 -->
+        </div>
+
+        <!-- 底部版权 -->
+        <div class="footer-copyright">
+            Copyright © 2026 SN のBlog All Rights Reserved
+        </div>
+    </div>
+
+    <script>
+        // 可添加任何交互，目前无复杂逻辑
+        // 简单提示：如果用户需要更精确的链接，可以手动修改按钮的href
+    </script>
+</body>
+</html>
